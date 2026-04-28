@@ -1,4 +1,4 @@
-# Chestertons MENA · Website Redesign Dashboard
+# Chestertons · Website Redesign Dashboard
 
 Executive dashboard tracking the website redesign decision, vendor quotes, financials, timeline, and project status. Built as a single self-contained HTML page with no build step required.
 
@@ -52,4 +52,4 @@ Internal use only. Not for redistribution.
 
 ---
 
-Built by the Chestertons MENA Digital & Technology team.
+Built by the Chestertons Digital & Technology team.

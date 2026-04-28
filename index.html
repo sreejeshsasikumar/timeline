@@ -3,7 +3,13 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Chestertons MENA · Website Redesign · Executive Dashboard</title>
+<title>Chestertons · Website Redesign · Executive Dashboard</title>
+<link rel="icon" type="image/avif" href="assets/chestertons-logo.avif" />
+<link rel="apple-touch-icon" href="assets/chestertons-logo.avif" />
+<meta name="theme-color" content="#0a0d24" />
+<meta property="og:title" content="Chestertons · Website Redesign Dashboard" />
+<meta property="og:description" content="Vendor quote analysis, financial breakdown, and live project status for the Chestertons website redesign programme." />
+<meta property="og:image" content="assets/chestertons-logo.avif" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -113,14 +119,22 @@ main { position: relative; z-index: 2; }
   font-weight: 500;
 }
 .nav-brand {
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  background: var(--grad-1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  display: flex;
+  align-items: center;
   padding-right: 18px;
   border-right: 1px solid var(--line);
+  height: 50px;
+}
+.nav-brand img {
+  height: 48px;
+  width: auto;
+  display: block;
+  /* Keep the purple logo legible on the dark nav */
+  filter: brightness(1.1) saturate(1.05);
+  transition: opacity 0.2s, filter 0.2s;
+}
+.nav-brand:hover img {
+  filter: brightness(1.2) saturate(1.15);
 }
 .nav a {
   color: var(--ink-2);
@@ -314,13 +328,8 @@ section { padding: 100px 0; position: relative; }
   overflow: hidden;
   background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent);
 }
-.decision-card.outsource {
-  border-color: rgba(248,113,113,0.18);
-}
-.decision-card.in-house {
-  border-color: rgba(52,211,153,0.25);
-  background: linear-gradient(180deg, rgba(52,211,153,0.05), rgba(56,189,248,0.02));
-  box-shadow: 0 0 80px rgba(52,211,153,0.06);
+.decision-card.neutral {
+  border-color: var(--line-strong);
 }
 .decision-label {
   display: inline-flex;
@@ -333,14 +342,9 @@ section { padding: 100px 0; position: relative; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 24px;
-}
-.decision-card.outsource .decision-label {
-  background: rgba(248,113,113,0.12);
-  color: #fca5a5;
-}
-.decision-card.in-house .decision-label {
-  background: rgba(52,211,153,0.12);
-  color: #6ee7b7;
+  background: rgba(192,132,252,0.12);
+  color: #c4b5fd;
+  border: 1px solid rgba(192,132,252,0.25);
 }
 .decision-headline {
   font-family: 'Playfair Display', serif;
@@ -397,15 +401,11 @@ section { padding: 100px 0; position: relative; }
   font-size: 11px;
   font-weight: 700;
 }
-.decision-card.outsource .decision-list li::before {
-  content: "×";
-  background: rgba(248,113,113,0.15);
-  color: #fca5a5;
-}
-.decision-card.in-house .decision-list li::before {
-  content: "✓";
-  background: rgba(52,211,153,0.18);
-  color: #6ee7b7;
+.decision-list.neutral li::before {
+  content: "•";
+  background: rgba(192,132,252,0.15);
+  color: var(--accent);
+  font-size: 14px;
 }
 
 /* VENDOR COMPARISON */
@@ -745,7 +745,7 @@ a.vendor-price-block:hover .pdf-chip {
 .tab-panel.active { display: block; }
 @keyframes panelIn {
   from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: none; }
+ to { opacity: 1; transform: none; }
 }
 .panel-foot {
   margin-top: 22px;
@@ -910,7 +910,7 @@ a.vendor-price-block:hover .pdf-chip {
 }
 @keyframes rotate {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+ to { transform: rotate(360deg); }
 }
 .savings-callout > * { position: relative; z-index: 1; }
 .savings-label {
@@ -1209,7 +1209,7 @@ a.vendor-price-block:hover .pdf-chip {
 }
 @keyframes bar-slide {
   from { transform: scaleX(0); opacity: 0; }
-  to { transform: scaleX(1); opacity: 1; }
+ to { transform: scaleX(1); opacity: 1; }
 }
 .gantt-bar.complete { background: linear-gradient(90deg, #34d399, #6ee7b7); }
 .gantt-bar.active { background: linear-gradient(90deg, #c084fc, #f472b6); }
@@ -1542,6 +1542,246 @@ footer a { color: var(--accent); text-decoration: none; }
   transition: opacity 1s, transform 1s;
 }
 .fade-in.in { opacity: 1; transform: none; }
+
+/* FLOATING PDF QUICK-ACCESS WIDGET (always visible) */
+.pdf-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 60;
+}
+.pdf-fab-toggle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: var(--grad-1);
+  color: #1a0d2e;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 16px 40px rgba(192,132,252,0.45), 0 0 0 1px rgba(255,255,255,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s;
+  position: relative;
+}
+.pdf-fab-toggle::after {
+  content: "6";
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: #0a0d24;
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(192,132,252,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-fab-toggle:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 20px 50px rgba(192,132,252,0.55);
+}
+.pdf-fab-toggle .icon {
+  font-size: 22px;
+  line-height: 1;
+}
+.pdf-fab-toggle .lbl {
+  font-size: 8px;
+  letter-spacing: 0.1em;
+}
+
+.pdf-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 100px;
+  z-index: 60;
+  width: 360px;
+  max-width: calc(100vw - 48px);
+  max-height: 70vh;
+  background: linear-gradient(180deg, rgba(17,22,46,0.98), rgba(10,13,36,0.98));
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(192,132,252,0.18);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: panelSlideIn 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.pdf-panel.open { display: flex; }
+@keyframes panelSlideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.pdf-panel-head {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pdf-panel-head h4 {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-0);
+  letter-spacing: -0.01em;
+}
+.pdf-panel-head .sub {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.pdf-panel-close {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pdf-panel-close:hover { background: rgba(255,255,255,0.1); color: var(--ink-0); }
+.pdf-panel-list {
+  overflow-y: auto;
+  padding: 8px;
+}
+.pdf-panel-group {
+  padding: 10px 12px 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.pdf-panel-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--ink-1);
+  transition: background 0.15s;
+}
+.pdf-panel-link:hover { background: rgba(255,255,255,0.05); }
+.pdf-panel-link .pdf-mini {
+  width: 28px; height: 34px;
+  border-radius: 4px;
+  background: var(--mini-grad, var(--grad-1));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 4px;
+  font-size: 7px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: rgba(0,0,0,0.7);
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.pdf-panel-link .pdf-mini::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 8px; height: 8px;
+  background: rgba(0,0,0,0.2);
+  clip-path: polygon(0 0, 100% 100%, 100% 0);
+}
+.pdf-panel-link[data-vendor="ds"] { --mini-grad: linear-gradient(135deg,#34d399,#6ee7b7); }
+.pdf-panel-link[data-vendor="dg"] { --mini-grad: linear-gradient(135deg,#c084fc,#f472b6); }
+.pdf-panel-link[data-vendor="px"] { --mini-grad: linear-gradient(135deg,#fbbf24,#fb7185); }
+.pdf-panel-link[data-vendor="sb"] { --mini-grad: linear-gradient(135deg,#38bdf8,#c084fc); }
+.pdf-panel-link-info {
+  flex: 1;
+  min-width: 0;
+}
+.pdf-panel-link-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-0);
+  margin-bottom: 1px;
+}
+.pdf-panel-link-meta {
+  font-size: 11px;
+  color: var(--ink-3);
+}
+.pdf-panel-link-arrow {
+  color: var(--ink-3);
+  font-size: 16px;
+}
+
+/* PDF button inside audit card */
+.audit-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(192,132,252,0.12);
+  border: 1px solid rgba(192,132,252,0.3);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  transition: all 0.2s;
+}
+.audit-pdf-btn:hover {
+  background: rgba(192,132,252,0.22);
+  border-color: rgba(192,132,252,0.5);
+  color: #e9d5ff;
+  transform: translateY(-1px);
+}
+.audit-pdf-btn::before {
+  content: "📄";
+  font-size: 13px;
+}
+.audit-pdf-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+/* Highlight Quotes nav link */
+.nav a[href="#quotes"] {
+  color: var(--accent);
+  font-weight: 600;
+  position: relative;
+}
+.nav a[href="#quotes"]::after {
+  content: "6";
+  position: relative;
+  top: -1px;
+  margin-left: 5px;
+  background: rgba(192,132,252,0.18);
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 100px;
+  border: 1px solid rgba(192,132,252,0.3);
+  letter-spacing: 0.04em;
+}
 
 /* VENDOR AUDIT (strengths + red flags) */
 .audit-stack {
@@ -2020,7 +2260,7 @@ footer a { color: var(--accent); text-decoration: none; }
 .modal-backdrop.open { display: flex; }
 @keyframes fadeIn {
   from { opacity: 0; }
-  to { opacity: 1; }
+ to { opacity: 1; }
 }
 .modal {
   background: linear-gradient(180deg, #11162e, #0a0d24);
@@ -2035,7 +2275,7 @@ footer a { color: var(--accent); text-decoration: none; }
 }
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(20px) scale(0.96); }
-  to { opacity: 1; transform: none; }
+ to { opacity: 1; transform: none; }
 }
 .modal::before {
   content: "";
@@ -2181,25 +2421,132 @@ footer a { color: var(--accent); text-decoration: none; }
   padding-left: 12px;
 }
 
-body.edit-mode .editable {
-  cursor: text;
+/* Edit-mode visual cues . only date and status get edit affordance */
+body.edit-mode .editable-date,
+body.edit-mode .editable-status {
+  cursor: pointer;
   border-radius: 6px;
+  transition: all 0.2s;
+  position: relative;
+}
+body.edit-mode .editable-date {
   padding: 2px 6px;
   margin: -2px -6px;
-  transition: all 0.2s;
   outline: 1px dashed rgba(192,132,252,0.35);
   outline-offset: 2px;
 }
-body.edit-mode .editable:hover {
+body.edit-mode .editable-date:hover {
   background: rgba(192,132,252,0.08);
   outline-color: var(--accent);
 }
-body.edit-mode .editable:focus {
-  outline: 2px solid var(--accent);
-  background: rgba(192,132,252,0.12);
-  outline-offset: 1px;
+body.edit-mode .editable-date::after {
+  content: "✎";
+  position: absolute;
+  top: -8px; right: -10px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #1a0d2e;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
-.editable[contenteditable]::selection { background: rgba(192,132,252,0.4); }
+body.edit-mode .editable-date:hover::after { opacity: 1; }
+
+body.edit-mode .editable-status {
+  outline: 1px dashed rgba(192,132,252,0.35);
+  outline-offset: 2px;
+  padding-right: 18px !important;
+}
+body.edit-mode .editable-status::after {
+  content: "▾";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  color: var(--accent);
+  pointer-events: none;
+}
+body.edit-mode .editable-status:hover {
+  outline-color: var(--accent);
+  background: rgba(192,132,252,0.1);
+}
+
+/* Inline date input that replaces the date display */
+.date-input-inline {
+  background: rgba(192,132,252,0.15);
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--ink-0);
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 8px;
+  width: 90px;
+  outline: none;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+.date-input-inline::placeholder { color: var(--ink-3); }
+.date-input-inline:focus {
+  background: rgba(192,132,252,0.22);
+  box-shadow: 0 0 0 3px rgba(192,132,252,0.18);
+}
+
+/* Status dropdown */
+.status-dropdown {
+  position: absolute;
+  z-index: 80;
+  background: linear-gradient(180deg, #11162e, #0a0d24);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  padding: 6px;
+  min-width: 160px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(192,132,252,0.18);
+  animation: ddIn 0.2s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes ddIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+ to { opacity: 1; transform: none; }
+}
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-1);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.status-option:hover { background: rgba(255,255,255,0.06); }
+.status-option.current {
+  background: rgba(192,132,252,0.12);
+  color: var(--accent);
+}
+.status-option .status-swatch {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.status-option[data-state="done"] .status-swatch     { background: #34d399; box-shadow: 0 0 8px #34d399; }
+.status-option[data-state="active"] .status-swatch   { background: #c084fc; box-shadow: 0 0 8px #c084fc; }
+.status-option[data-state="next"] .status-swatch     { background: rgba(255,255,255,0.35); }
+.status-option[data-state="blocked"] .status-swatch  { background: #f87171; box-shadow: 0 0 8px #f87171; }
+.status-option[data-state="delayed"] .status-swatch  { background: #fbbf24; box-shadow: 0 0 8px #fbbf24; }
+
+/* Status pill colours by state */
+.milestone-node[data-state="blocked"] { --node-color: #f87171; }
+.milestone-node[data-state="blocked"] .milestone-status { background: rgba(248,113,113,0.15); color: #fca5a5; }
+.milestone-node[data-state="delayed"] { --node-color: #fbbf24; }
+.milestone-node[data-state="delayed"] .milestone-status { background: rgba(251,191,36,0.15); color: #fcd34d; }
 
 .lock-hint {
   position: absolute;
@@ -2287,7 +2634,9 @@ body.authenticated .lock-hint { display: none; }
 <div class="grid-overlay"></div>
 
 <nav class="nav">
-  <div class="nav-brand">Chestertons MENA</div>
+  <a class="nav-brand" href="#" title="Chestertons" aria-label="Chestertons home">
+    <img src="assets/chestertons-logo.avif" alt="Chestertons" width="128" height="48" />
+  </a>
   <a href="#decision">Decision</a>
   <a href="#vendors">Vendors</a>
   <a href="#audit">Audit</a>
@@ -2312,73 +2661,73 @@ body.authenticated .lock-hint { display: none; }
 <section class="hero container">
   <div class="hero-tag">
     <span class="pulse-dot"></span>
-    Executive Briefing · Confidential · April 2026
+    Decision Brief · Confidential · April 2026
   </div>
   <h1 class="hero-title">
     Website Redesign.<br/>
-    <span class="accent">Build it ourselves,</span><br/>
-    <em>save 88%, ship 6 weeks faster.</em>
+    <span class="accent">Five delivery options</span><br/>
+    <em>compared on equivalent terms.</em>
   </h1>
   <p class="hero-subtitle">
-    Four vendors quoted. Numbers ranged from AED 8K to AED 175K all-in. The dashboard you are reading right now was built by our internal team in a single sprint. It is the proof of concept for what we are proposing: keep the work, the IP, and the institutional knowledge in-house.
+    Four external vendor proposals plus internal delivery capacity. This brief presents cost, scope, timeline, and risk for each path. Source documents and quotation PDFs are linked throughout. The decision sits with the leadership team.
   </p>
 
   <div class="hero-stats">
     <div class="hero-stat">
-      <div class="hero-stat-label">Vendors Evaluated</div>
-      <div class="hero-stat-value" data-counter="4">0</div>
-      <div class="hero-stat-meta">DevSpace · Digital Gravity · PIXL · StarBerry</div>
+      <div class="hero-stat-label">Options Evaluated</div>
+      <div class="hero-stat-value" data-counter="5">0</div>
+      <div class="hero-stat-meta">4 external vendors + 1 internal</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">Highest Quote</div>
-      <div class="hero-stat-value"><span class="unit">AED</span><span data-counter="175">0</span><span class="unit">K</span></div>
-      <div class="hero-stat-meta">PIXL incl. add-ons & VAT</div>
+      <div class="hero-stat-label">Quote Range</div>
+      <div class="hero-stat-value"><span class="unit">AED</span><span data-counter="8">0</span><span class="unit">K to 175K</span></div>
+      <div class="hero-stat-meta">Lowest to highest, all-in</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">In-House Estimate</div>
-      <div class="hero-stat-value"><span class="unit">AED</span><span data-counter="22">0</span><span class="unit">K</span></div>
-      <div class="hero-stat-meta">Tooling, hosting, contingency</div>
+      <div class="hero-stat-label">Delivery Range</div>
+      <div class="hero-stat-value"><span data-counter="4">0</span><span class="unit"> to 24 wks</span></div>
+      <div class="hero-stat-meta">Excludes post-launch support</div>
     </div>
     <div class="hero-stat">
-      <div class="hero-stat-label">Projected Saving</div>
-      <div class="hero-stat-value"><span data-counter="153">0</span><span class="unit">K AED</span></div>
-      <div class="hero-stat-meta">Year-1 vs. PIXL full-stack</div>
+      <div class="hero-stat-label">Source Documents</div>
+      <div class="hero-stat-value"><span data-counter="6">0</span><span class="unit"> PDFs</span></div>
+      <div class="hero-stat-meta">All linked in this brief</div>
     </div>
   </div>
 </section>
 
 <!-- THE DECISION -->
 <section id="decision" class="container">
-  <div class="section-eyebrow">The Decision</div>
-  <h2 class="section-title">Two paths. <em>Same destination.</em> Very different cost of ownership.</h2>
-  <p class="section-lede">Every vendor here will deliver a working site. The real question is what we own when the dust settles, who picks up the phone at 11pm when something breaks, and whether we are paying a premium for a black box.</p>
+  <div class="section-eyebrow">Engagement Models</div>
+  <h2 class="section-title">Two delivery models <em>under consideration.</em></h2>
+  <p class="section-lede">The work can be delivered externally by a vendor, or internally by the in-house Digital and Technology team. Both models are presented below on equivalent dimensions for direct comparison.</p>
 
   <div class="decision-grid">
-    <div class="decision-card outsource">
-      <div class="decision-label">⚠ Outsource Path</div>
-      <div class="decision-headline">Pay a vendor. Wait for delivery. Hope it works.</div>
-      <div class="decision-cost"><span class="currency">AED</span>55K<span style="color:var(--ink-3);font-size:24px;font-weight:400;"> – 175K</span></div>
-      <div class="decision-cost-meta">Range across the four design + development quotes received (excl. ongoing retainers)</div>
-      <ul class="decision-list">
-        <li>IP and source code transfer is contractual, not cultural. Tribal knowledge stays with the vendor.</li>
-        <li>Every change request after launch is a billable hour. AED 200/hr at the cheapest, AED 500/hr at the high end.</li>
-        <li>Roadmap velocity decoupled from our calendar. Vendor priorities shift without notice.</li>
-        <li>StarBerry option locks us into a 24-month hosting contract. AED 16K+ baked in before we even ship.</li>
-        <li>Three of four vendors based outside the UAE. Time-zone friction, RERA literacy gaps, slower escalation.</li>
+    <div class="decision-card neutral">
+      <div class="decision-label">Model A · External Vendor Delivery</div>
+      <div class="decision-headline">Work outsourced to one of the four vendors who submitted proposals.</div>
+      <div class="decision-cost"><span class="currency">AED</span>26K<span style="color:var(--ink-3);font-size:24px;font-weight:400;"> to 175K</span></div>
+      <div class="decision-cost-meta">Range across the four Design + Development proposals received</div>
+      <ul class="decision-list neutral">
+        <li>Cash cost: AED 26K to AED 175K depending on vendor selected. Excludes ongoing retainers and platform subscriptions.</li>
+        <li>IP and source code transfer occurs at project completion per contract. Operational knowledge resides with the vendor.</li>
+        <li>Post-launch change requests billed at vendor hourly rate, typically AED 200 to 500 per hour.</li>
+        <li>Three of four vendors are based outside the UAE. One vendor (StarBerry) requires a 24-month support contract.</li>
+        <li>Delivery timeline: 10 to 24 weeks depending on vendor and scope.</li>
       </ul>
     </div>
 
-    <div class="decision-card in-house">
-      <div class="decision-label">★ In-House Build</div>
-      <div class="decision-headline">Use the team we already pay. Ship faster. Own everything.</div>
+    <div class="decision-card neutral">
+      <div class="decision-label">Model B · Internal Team Delivery</div>
+      <div class="decision-headline">Work delivered by the existing in-house Digital and Technology team.</div>
       <div class="decision-cost"><span class="currency">AED</span>22K</div>
-      <div class="decision-cost-meta">Tooling, cloud, fonts, contingency. Salaries are sunk cost.</div>
-      <ul class="decision-list">
-        <li>Source code, design system, and CMS schema live in our GitHub from day one. Zero handover risk.</li>
-        <li>Same team that builds it, supports it. Bug fix turnaround in hours, not vendor SLA tickets.</li>
-        <li>Roadmap is ours. A/B tests, RERA updates, agent onboarding flows ship when we say they ship.</li>
-        <li>Capability we keep forever. The next site, the broker portal, the off-plan microsite, all in-house.</li>
-        <li>This dashboard you are reading is exhibit A. Built in &lt; 1 week by the same team that will build the site.</li>
+      <div class="decision-cost-meta">Direct cash cost: tooling, cloud hosting, contingency. Excludes loaded engineering effort.</div>
+      <ul class="decision-list neutral">
+        <li>Cash cost: AED 22K covering tools, cloud, contingency. Loaded engineering cost (salary plus overhead) is approximately AED 80K to 100K of effort.</li>
+        <li>Source code, design system, and CMS schema retained internally throughout the project.</li>
+        <li>Post-launch changes handled by the same team at no incremental cash cost. Capacity is shared with business-as-usual workload.</li>
+        <li>Delivery timeline: approximately 14 weeks. Subject to internal capacity and prioritisation against other commitments.</li>
+        <li>Risk concentration: key-person dependency on lead developer. Discovery and wireframe phases already complete (see Status section).</li>
       </ul>
     </div>
   </div>
@@ -2386,9 +2735,9 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- VENDOR COMPARISON -->
 <section id="vendors" class="container">
-  <div class="section-eyebrow">Vendor Quote Analysis</div>
-  <h2 class="section-title">What the market quoted us. <em>The full picture.</em></h2>
-  <p class="section-lede">Four agencies, two engagement models each (design only, design + development). Pricing normalised to AED for direct comparison. Sources: vendor PDFs dated April 2026.</p>
+  <div class="section-eyebrow">Vendor Proposals Received</div>
+  <h2 class="section-title">Four external vendor proposals, <em>summarised.</em></h2>
+  <p class="section-lede">Four vendors submitted proposals across two engagement models (Design only, Design + Development). Pricing normalised to AED for direct comparison. Source documents are linked in the Quote Library section. All figures dated April 2026.</p>
 
   <div class="vendor-grid">
 
@@ -2414,11 +2763,11 @@ body.authenticated .lock-hint { display: none; }
       <div class="vendor-tags">
         <span class="vendor-tag">Next.js + Laravel</span>
         <span class="vendor-tag">MySQL</span>
-        <span class="vendor-tag">10–12 weeks</span>
+        <span class="vendor-tag">10 to 12 weeks</span>
         <span class="vendor-tag">30-day support</span>
       </div>
       <div class="vendor-notes">
-        <strong>Reality check:</strong> Cheapest by a wide margin but admin uses an off-the-shelf template, no Arabic, no design system, support window minimal. Looks attractive on paper, expensive once we account for the 12 months of "small fixes" we will have to fund.
+        <strong>Notes:</strong> Lowest quote received. Admin panel uses an off-the-shelf template. No Arabic language support included. No CRM integration mentioned. 30-day post-launch support window. Pakistan-based team, no on-site presence in UAE.
       </div>
     </div>
 
@@ -2444,11 +2793,11 @@ body.authenticated .lock-hint { display: none; }
       <div class="vendor-tags">
         <span class="vendor-tag">React + Node</span>
         <span class="vendor-tag">PostgreSQL</span>
-        <span class="vendor-tag">11–12 weeks</span>
+        <span class="vendor-tag">11 to 12 weeks</span>
         <span class="vendor-tag">4-month warranty</span>
       </div>
       <div class="vendor-notes">
-        <strong>Reality check:</strong> Solid agency, real local references (DAMAC, Aldar, Beyond). Base price is fair, but the things we actually want, Arabic, map clustering, comparison tool, are AED 38K extras. True all-in is AED 93K.
+        <strong>Notes:</strong> Local Dubai team. Real-estate references include DAMAC, Aldar, Beyond, Bloom. Base proposal is AED 55K. Arabic language, property comparison, map clustering, off-plan microsite, valuation form, and WhatsApp Business API are sold as a separate AED 38K add-on package. All-in at AED 93K. 4-month bug-free warranty included.
       </div>
     </div>
 
@@ -2474,11 +2823,11 @@ body.authenticated .lock-hint { display: none; }
       <div class="vendor-tags">
         <span class="vendor-tag">Next.js + Strapi</span>
         <span class="vendor-tag">PostgreSQL</span>
-        <span class="vendor-tag">16–18 weeks</span>
+        <span class="vendor-tag">16 to 18 weeks</span>
         <span class="vendor-tag">Most thorough scope</span>
       </div>
       <div class="vendor-notes">
-        <strong>Reality check:</strong> Best-in-class proposal, real-estate fluency (Omniyat, Eywa, OBG), correct technical instincts (SSR, RERA validation, Lighthouse CI). Also the most expensive. We are paying for excellence we can replicate internally.
+        <strong>Notes:</strong> Highest quote received. Dubai-based (JLT). Real-estate references include Omniyat, Eywa, One Broker Group, Allegiance. Modern technical stack (Next.js 14, Strapi, PostgreSQL, RERA validation, Lighthouse CI). Native Arabic language support is sold as an AED 6,500 add-on. Payment terms: 75% upfront, 25% on handover. Platform subscriptions (Vercel, Mapbox, AWS) excluded.
       </div>
     </div>
 
@@ -2504,11 +2853,11 @@ body.authenticated .lock-hint { display: none; }
       <div class="vendor-tags">
         <span class="vendor-tag">Next.js + Strapi</span>
         <span class="vendor-tag">Vercel + AWS</span>
-        <span class="vendor-tag">5–6 months</span>
+        <span class="vendor-tag">5 to 6 months</span>
         <span class="vendor-tag">⚠ 24-mo lock-in</span>
       </div>
       <div class="vendor-notes">
-        <strong>Reality check:</strong> Bundles dev with mandatory 24-month hosting/support at AED 3.1K/mo. Quote contingent on Chestertons Global being built first by them. Effective 2-year commitment is AED 153K. Estate-agency credentials are real but UK-centric.
+        <strong>Notes:</strong> UK-based (Derby). 30+ years specialism in estate-agency software. Quote bundles development with mandatory 24-month hosting and support at £669 per month (~AED 3,100/month). Two-year cash commitment approximately AED 153K. Quote is contingent on the Chestertons Global website being delivered by StarBerry first. Auto-renewing contract terms.
       </div>
     </div>
 
@@ -2613,7 +2962,7 @@ body.authenticated .lock-hint { display: none; }
             <div class="compare-track"><div class="compare-fill" style="--bar-grad: linear-gradient(90deg,#34d399,#6ee7b7);" data-target="13"></div></div>
             <div class="compare-amount">22<span class="unit">K AED</span></div>
           </div>
-          <div class="compare-jump savings">+15K · Best value lift</div>
+          <div class="compare-jump">Δ +15K · Design to Dev uplift</div>
         </div>
       </div>
 
@@ -2630,7 +2979,7 @@ body.authenticated .lock-hint { display: none; }
             <div class="compare-track"><div class="compare-fill" style="--bar-grad: linear-gradient(90deg,#fbbf24,#fb7185);" data-target="15"></div></div>
             <div class="compare-amount">26<span class="unit">K AED</span></div>
           </div>
-          <div class="compare-jump savings">+18K · Modest jump</div>
+          <div class="compare-jump">Δ +18K · Design to Dev uplift</div>
         </div>
       </div>
 
@@ -2647,7 +2996,7 @@ body.authenticated .lock-hint { display: none; }
             <div class="compare-track"><div class="compare-fill" style="--bar-grad: linear-gradient(90deg,#c084fc,#f472b6);" data-target="53"></div></div>
             <div class="compare-amount">93<span class="unit">K AED</span></div>
           </div>
-          <div class="compare-jump">+73K · 4.7× design cost</div>
+          <div class="compare-jump">Δ +73K · 4.7× the design cost</div>
         </div>
       </div>
 
@@ -2664,7 +3013,7 @@ body.authenticated .lock-hint { display: none; }
             <div class="compare-track"><div class="compare-fill" style="--bar-grad: linear-gradient(90deg,#38bdf8,#c084fc);" data-target="87"></div></div>
             <div class="compare-amount">152<span class="unit">K AED</span></div>
           </div>
-          <div class="compare-jump expensive">+110K · 3.6× design cost</div>
+          <div class="compare-jump">Δ +110K · 3.6× the design cost</div>
         </div>
       </div>
 
@@ -2681,12 +3030,12 @@ body.authenticated .lock-hint { display: none; }
             <div class="compare-track"><div class="compare-fill" style="--bar-grad: linear-gradient(90deg,#f87171,#c084fc);" data-target="87"></div></div>
             <div class="compare-amount">153<span class="unit">K AED</span></div>
           </div>
-          <div class="compare-jump expensive">No design-only option · 24-mo lock-in</div>
+          <div class="compare-jump">Design-only not offered · 24-month engagement</div>
         </div>
       </div>
 
       <div class="panel-foot">
-        Compare reveals the upsell pattern. Vendors typically multiply the design fee by 3.5× to 5× for development. The in-house option keeps that multiple at 3.1× because the same team handles both phases.
+        The delta column shows the price uplift from Design-only to Design + Development for each option. Vendor uplifts range from 1.7× (DevSpace) to 4.7× (Digital Gravity). Internal delivery uplift is 3.1×. StarBerry does not offer a Design-only engagement.
       </div>
     </div>
   </div>
@@ -2694,9 +3043,9 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- VENDOR AUDIT · KEY POINTS & RED FLAGS -->
 <section id="audit" class="container">
-  <div class="section-eyebrow">Vendor Audit · Strengths &amp; Red Flags</div>
-  <h2 class="section-title">The full picture, <em>side by side.</em></h2>
-  <p class="section-lede">What each proposal does well, and what hides in the small print. Read both columns before deciding. The verdict pill on each card is our analyst recommendation, not a promise.</p>
+  <div class="section-eyebrow">Option Profiles · Capabilities &amp; Considerations</div>
+  <h2 class="section-title">Each option side by side, <em>capabilities and considerations.</em></h2>
+  <p class="section-lede">Each card lists the documented capabilities of the proposal alongside the considerations identified during review. The label on each card describes the cost tier and engagement model. This section is descriptive, not prescriptive.</p>
 
   <div class="audit-stack">
 
@@ -2704,42 +3053,44 @@ body.authenticated .lock-hint { display: none; }
     <div class="audit-card" data-verdict="recommended">
       <div class="audit-head">
         <div class="audit-head-left">
-          <div class="audit-vendor-icon">★</div>
+          <div class="audit-vendor-icon">IH</div>
           <div>
-            <div class="audit-vendor-name">In-House Build</div>
-            <div class="audit-vendor-meta">Internal Digital &amp; Tech team <span class="dot"></span> AED 22K all-in <span class="dot"></span> 14 weeks</div>
+            <div class="audit-vendor-name">In-House Delivery</div>
+            <div class="audit-vendor-meta">Internal Digital &amp; Tech team <span class="dot"></span> AED 22K cash <span class="dot"></span> 14 weeks</div>
           </div>
         </div>
-        <div class="verdict-pill recommended">★ Recommended</div>
+        <div class="audit-pdf-row">
+          <div class="verdict-pill recommended">Internal Delivery</div>
+        </div>
       </div>
 
       <div class="audit-body">
         <div class="audit-col" data-type="strengths">
-          <div class="audit-col-head"><span class="col-icon">✓</span>Key Strengths</div>
+          <div class="audit-col-head"><span class="col-icon">✓</span>Capabilities</div>
           <ul class="audit-list">
-            <li><strong>88% saving</strong> versus the highest vendor quote, with full IP retention forever</li>
-            <li>Source code, design system, and CMS schemas live in our GitHub from day one</li>
-            <li>Same team builds and supports. Bug-fix turnaround in hours, not vendor SLA tickets</li>
-            <li>Roadmap velocity controlled internally. Feature releases when we say so</li>
-            <li><strong>This dashboard is the proof.</strong> Built in under a week using the same stack we will use for the site</li>
+            <li>Direct cash cost AED 22K covering tools, cloud hosting, and contingency</li>
+            <li>Source code, design system, and CMS schemas retained internally from day one</li>
+            <li>Same team builds and operates. No external SLA dependency for post-launch changes</li>
+            <li>Roadmap and release schedule controlled internally</li>
+            <li>Discovery and wireframe phases already complete (delivered weeks 1 to 4)</li>
           </ul>
         </div>
         <div class="audit-col" data-type="redflags">
-          <div class="audit-col-head"><span class="col-icon">!</span>Watch-outs</div>
+          <div class="audit-col-head"><span class="col-icon">!</span>Considerations</div>
           <ul class="audit-list">
-            <li>BAU dilution risk during 14-week sprint. Need a clear rota and acceptance of slowed output elsewhere</li>
+            <li>Loaded engineering effort (salary plus overhead) estimated at AED 80 to 100K. Cash cost is AED 22K</li>
+            <li>Capacity shared with business-as-usual workload. Other commitments may slip during the 14-week build</li>
             <li>Key-person dependency on lead developer. Mitigated by pair programming, not eliminated</li>
-            <li>No external warranty cover. Every defect is internal effort, not a vendor refund</li>
-            <li>Loaded engineering cost (salary + benefits) is closer to AED 80–100K of effort. Cash cost is AED 22K. Be ready for the question</li>
-            <li>RERA compliance review still needs external legal counsel sign-off pre-launch</li>
+            <li>No external warranty cover. Defects handled by the internal team</li>
+            <li>RERA compliance review requires external legal counsel sign-off pre-launch (additional cost)</li>
           </ul>
         </div>
       </div>
 
       <div class="audit-bottom">
-        <div class="audit-bottom-label">Bottom line</div>
+        <div class="audit-bottom-label">Summary</div>
         <div class="audit-bottom-text">
-          <strong>Best total value if BAU capacity is honestly available.</strong> Saves cash, builds capability, eliminates vendor lock-in. The risks are real but manageable with a published sprint plan.
+          Lowest direct cash cost. Highest internal capacity demand. IP and operational knowledge retained in-house. Suitable when internal team availability is confirmed and BAU prioritisation is agreed.
         </div>
       </div>
     </div>
@@ -2751,41 +3102,44 @@ body.authenticated .lock-hint { display: none; }
           <div class="audit-vendor-icon">DS</div>
           <div>
             <div class="audit-vendor-name">DevSpace</div>
-            <div class="audit-vendor-meta">Pakistan <span class="dot"></span> USD 7,000 / AED 26K <span class="dot"></span> 10–12 weeks</div>
+            <div class="audit-vendor-meta">Pakistan <span class="dot"></span> USD 7,000 / AED 26K <span class="dot"></span> 10 to 12 weeks</div>
           </div>
         </div>
-        <div class="verdict-pill budget">Budget · Caveat Heavy</div>
+        <div class="audit-pdf-row">
+          <a class="audit-pdf-btn" href="quotes/devspace-design-dev.pdf" target="_blank" rel="noopener">View Proposal PDF</a>
+          <div class="verdict-pill budget">Lowest-Cost Tier</div>
+        </div>
       </div>
 
       <div class="audit-body">
         <div class="audit-col" data-type="strengths">
-          <div class="audit-col-head"><span class="col-icon">✓</span>Key Strengths</div>
+          <div class="audit-col-head"><span class="col-icon">✓</span>Capabilities</div>
           <ul class="audit-list">
-            <li><strong>Cheapest by a wide margin</strong> across the entire field</li>
-            <li>Modern tech choices: Next.js + Laravel + MySQL + AWS</li>
-            <li>SSR for SEO, structured data, JSON-LD baked in</li>
+            <li>Lowest quote received among the four vendors</li>
+            <li>Stack: Next.js, Laravel, MySQL, AWS hosting</li>
+            <li>Server-side rendering with structured data (JSON-LD) for SEO</li>
             <li>Automated XML property feed integration via cron</li>
             <li>GitHub Actions CI/CD, S3 media storage, environment-based secrets</li>
           </ul>
         </div>
         <div class="audit-col" data-type="redflags">
-          <div class="audit-col-head"><span class="col-icon">!</span>Red Flags</div>
+          <div class="audit-col-head"><span class="col-icon">!</span>Considerations</div>
           <ul class="audit-list">
-            <li><strong>"Other packages selected by the development team"</strong> — open-ended scope, contractual ambiguity</li>
-            <li>Admin uses an off-the-shelf template. <strong>Zero custom UI for the back-of-house</strong></li>
-            <li>Only 30 days post-launch support. No warranty period. Every fix after = billable</li>
-            <li><strong>No Arabic language. No RERA compliance language. No CRM integration.</strong> All would be paid extras</li>
-            <li>Pakistan time zone, holidays follow Pakistan calendar. Coordination friction guaranteed</li>
-            <li>Up to 3 design revisions only. Beyond that, scope creep charges</li>
-            <li>Core pages component-driven, not free-edit. Editorial flexibility reduced versus current WordPress</li>
+            <li>Proposal text states: "Other packages selected by the development team" . scope details defined post-contract</li>
+            <li>Admin panel uses a third-party template, no custom design</li>
+            <li>30 days post-launch support. No formal warranty period</li>
+            <li>Arabic language, RERA-specific compliance, and CRM integration not included</li>
+            <li>Pakistan time zone (UTC+5). Public holidays follow Pakistan calendar</li>
+            <li>Up to 3 design revisions; further revisions billable</li>
+            <li>Core pages are component-driven (not WYSIWYG editable like the current WordPress site)</li>
           </ul>
         </div>
       </div>
 
       <div class="audit-bottom">
-        <div class="audit-bottom-label">Bottom line</div>
+        <div class="audit-bottom-label">Summary</div>
         <div class="audit-bottom-text">
-          The price tag is a trap. <strong>Saves AED 50–125K up front, costs us 12 months of unbudgeted change requests.</strong> Acceptable only if scope is genuinely minimal and we have someone in-house to manage them weekly.
+          Lowest cash quote. Narrow scope. Out-of-scope features (Arabic, RERA, CRM) would require separate procurement. Suitable when scope can be tightly defined and post-launch change frequency is expected to be low.
         </div>
       </div>
     </div>
@@ -2797,43 +3151,46 @@ body.authenticated .lock-hint { display: none; }
           <div class="audit-vendor-icon">DG</div>
           <div>
             <div class="audit-vendor-name">Digital Gravity</div>
-            <div class="audit-vendor-meta">Dubai <span class="dot"></span> AED 55K base / 93K all-in <span class="dot"></span> 11–12 weeks</div>
+            <div class="audit-vendor-meta">Dubai <span class="dot"></span> AED 55K base / 93K with extras <span class="dot"></span> 11 to 12 weeks</div>
           </div>
         </div>
-        <div class="verdict-pill solid">Solid · Watch the Add-ons</div>
+        <div class="audit-pdf-row">
+          <a class="audit-pdf-btn" href="quotes/digital-gravity-design-dev.pdf" target="_blank" rel="noopener">View Proposal PDF</a>
+          <div class="verdict-pill solid">Mid-Cost Tier · Local</div>
+        </div>
       </div>
 
       <div class="audit-body">
         <div class="audit-col" data-type="strengths">
-          <div class="audit-col-head"><span class="col-icon">✓</span>Key Strengths</div>
+          <div class="audit-col-head"><span class="col-icon">✓</span>Capabilities</div>
           <ul class="audit-list">
-            <li><strong>Local Dubai team.</strong> Same time zone, same calendar, easy escalation</li>
-            <li>18+ years, 250+ clients including DAMAC, Aldar, Beyond, Bloom, Emaar Atmosphere</li>
-            <li>Government track record (DEWA, Dubai Police, DIFC, Smart Dubai, DP World)</li>
-            <li><strong>4-month bug-free warranty</strong> — the longest of all vendors</li>
+            <li>Local Dubai team. Same time zone as Chestertons MENA</li>
+            <li>18+ years in business, 250+ clients</li>
+            <li>Real-estate references: DAMAC, Aldar, Beyond, Bloom, Emaar Atmosphere</li>
+            <li>Government client references: DEWA, Dubai Police, DIFC, Smart Dubai, DP World</li>
+            <li>4-month bug-free warranty (longest among the four vendors)</li>
             <li>OWASP Top 10 security framework, Cloudflare CDN, full architecture document</li>
-            <li>Granular human-centred design philosophy with structured discovery, plan, design, execute phases</li>
           </ul>
         </div>
         <div class="audit-col" data-type="redflags">
-          <div class="audit-col-head"><span class="col-icon">!</span>Red Flags</div>
+          <div class="audit-col-head"><span class="col-icon">!</span>Considerations</div>
           <ul class="audit-list">
-            <li><strong>Base AED 55K does NOT include the features we need.</strong> Arabic, comparison, off-plan microsite, valuation form, WhatsApp = +AED 38K extras pack</li>
-            <li>Real all-in is <strong>AED 93K, not 55K</strong>. Headline number is misleading</li>
-            <li>Each additional off-plan microsite = AED 12K on top</li>
-            <li>"Detailed scope determined during analysis stage" — flex risk after contract sign</li>
-            <li>Vimeo paid plan, hosting, and CRM integrations <strong>purchased separately by client</strong></li>
-            <li>Content migration NOT covered. We move all WordPress content ourselves</li>
-            <li>Admin panel uses default English template, no custom branding for our team</li>
-            <li>Only 2 rounds of revisions on design. Then it's billable</li>
+            <li>Base proposal at AED 55K excludes Arabic language, property comparison, off-plan microsite, valuation form, and WhatsApp Business API</li>
+            <li>Add-on package for the above: AED 38K (total all-in: AED 93K)</li>
+            <li>Each additional off-plan microsite: AED 12K</li>
+            <li>Proposal states detailed scope is determined during analysis stage (post-contract)</li>
+            <li>Vimeo Pro subscription, hosting, and CRM integration purchased separately by client</li>
+            <li>Content migration from existing WordPress site not included</li>
+            <li>Admin panel uses default English template, no custom branding</li>
+            <li>2 rounds of revisions on design, additional rounds billable</li>
           </ul>
         </div>
       </div>
 
       <div class="audit-bottom">
-        <div class="audit-bottom-label">Bottom line</div>
+        <div class="audit-bottom-label">Summary</div>
         <div class="audit-bottom-text">
-          <strong>The most honest mid-market quote, but the price-up game is real.</strong> If we sign at AED 55K we will end up at AED 93K minimum once add-ons land. Negotiate the extras into the base before signing or walk.
+          Local team, established real-estate portfolio. Headline price (AED 55K) covers core scope only; full feature parity with current Chestertons requirements is approximately AED 93K including the extras pack.
         </div>
       </div>
     </div>
@@ -2845,43 +3202,47 @@ body.authenticated .lock-hint { display: none; }
           <div class="audit-vendor-icon">PX</div>
           <div>
             <div class="audit-vendor-name">PIXL Global</div>
-            <div class="audit-vendor-meta">Dubai · JLT <span class="dot"></span> AED 145K / 152K w/VAT <span class="dot"></span> 16–18 weeks</div>
+            <div class="audit-vendor-meta">Dubai · JLT <span class="dot"></span> AED 145K / 152K incl. VAT <span class="dot"></span> 16 to 18 weeks</div>
           </div>
         </div>
-        <div class="verdict-pill premium">Premium · Most Expensive</div>
+        <div class="audit-pdf-row">
+          <a class="audit-pdf-btn" href="quotes/pixl-design-dev.pdf" target="_blank" rel="noopener">View Proposal PDF</a>
+          <div class="verdict-pill premium">Highest-Cost Tier · Local</div>
+        </div>
       </div>
 
       <div class="audit-body">
         <div class="audit-col" data-type="strengths">
-          <div class="audit-col-head"><span class="col-icon">✓</span>Key Strengths</div>
+          <div class="audit-col-head"><span class="col-icon">✓</span>Capabilities</div>
           <ul class="audit-list">
-            <li><strong>Strongest real-estate portfolio</strong> of all four (Omniyat, Eywa, OBG, Allegiance, Sukoon, Sakani)</li>
-            <li>JLT-based. Same neighbourhood. In-person reviews trivial</li>
-            <li>Highest technical rigour: Next.js 14 SSR, TypeScript 5.5, Zod RERA validation, Lighthouse CI enforcement</li>
-            <li><strong>Native Arabic from day one</strong>, not a mirrored layout</li>
-            <li>90-day warranty plus 30-day post-launch support and bug fixes</li>
-            <li>Granular feature pricing — we can opt out individually if budget tightens</li>
+            <li>Real-estate references: Omniyat, Eywa, One Broker Group, Allegiance, Sukoon, Sakani</li>
+            <li>JLT-based, same neighbourhood as Chestertons MENA</li>
+            <li>Stack: Next.js 14, React 18, TypeScript 5.5, Strapi CMS, PostgreSQL</li>
+            <li>SSR for SEO, Zod-based RERA validation, Lighthouse CI enforcement</li>
+            <li>Native Arabic language support included as a paid feature</li>
+            <li>90-day warranty plus 30-day post-launch support</li>
+            <li>Feature pricing is itemised. Individual features can be excluded if budget is reduced</li>
             <li>Full IP and source-code transfer on completion</li>
           </ul>
         </div>
         <div class="audit-col" data-type="redflags">
-          <div class="audit-col-head"><span class="col-icon">!</span>Red Flags</div>
+          <div class="audit-col-head"><span class="col-icon">!</span>Considerations</div>
           <ul class="audit-list">
-            <li><strong>By far the most expensive.</strong> AED 152K incl. VAT, 175K with optional add-ons</li>
-            <li>Arabic charged as a <strong>AED 6,500 add-on</strong> — should be standard for any MENA agency</li>
-            <li><strong>75% upfront payment, 25% on handover.</strong> Heavy front-load, weak vendor accountability</li>
-            <li>16–18 weeks — the longest delivery timeline of the four</li>
-            <li>Platform subscriptions excluded: Vercel, Mapbox, SendGrid, AWS = ~USD 200–450 per month, paid by us</li>
-            <li>Optional retainer of AED 10K/month afterwards, additional hours at AED 200/hr</li>
-            <li>Acknowledges our internal demo build but explicitly treats it as "reference only", not a starting codebase</li>
+            <li>Highest quote received: AED 145K base, AED 152K including VAT, AED 175K with optional add-ons</li>
+            <li>Arabic language support priced as a separate AED 6,500 add-on (not in base scope)</li>
+            <li>Payment terms: 75% upfront, 25% on handover</li>
+            <li>16 to 18 weeks delivery timeline (longest among the four vendors)</li>
+            <li>Platform subscriptions (Vercel, Mapbox, SendGrid, AWS) excluded, estimated USD 200 to 450 per month</li>
+            <li>Optional retainer afterwards: AED 10K per month, additional hours at AED 200 per hour</li>
+            <li>Proposal explicitly notes the existing Chestertons demo build will be treated as reference only</li>
           </ul>
         </div>
       </div>
 
       <div class="audit-bottom">
-        <div class="audit-bottom-label">Bottom line</div>
+        <div class="audit-bottom-label">Summary</div>
         <div class="audit-bottom-text">
-          <strong>You get what you pay for, but we are paying for excellence we can replicate internally.</strong> Best vendor in the field on technical merit. Worst on price. Choose only if internal capacity is genuinely zero.
+          Highest direct cost. Strongest real-estate portfolio and technical specification among the four vendors. Local presence in JLT. Premium positioning reflected in scope detail and pricing.
         </div>
       </div>
     </div>
@@ -2893,44 +3254,47 @@ body.authenticated .lock-hint { display: none; }
           <div class="audit-vendor-icon">SB</div>
           <div>
             <div class="audit-vendor-name">StarBerry</div>
-            <div class="audit-vendor-meta">UK · Derby <span class="dot"></span> AED 78K + AED 75K (24mo) <span class="dot"></span> 5–6 months</div>
+            <div class="audit-vendor-meta">UK · Derby <span class="dot"></span> AED 78K build + AED 75K (24mo support) <span class="dot"></span> 5 to 6 months</div>
           </div>
         </div>
-        <div class="verdict-pill risk">⚠ Hidden Lock-in</div>
+        <div class="audit-pdf-row">
+          <a class="audit-pdf-btn" href="quotes/starberry-design-dev.pdf" target="_blank" rel="noopener">View Proposal PDF</a>
+          <div class="verdict-pill risk">Subscription Model</div>
+        </div>
       </div>
 
       <div class="audit-body">
         <div class="audit-col" data-type="strengths">
-          <div class="audit-col-head"><span class="col-icon">✓</span>Key Strengths</div>
+          <div class="audit-col-head"><span class="col-icon">✓</span>Capabilities</div>
           <ul class="audit-list">
-            <li>30+ years specialism in estate-agency software. Niche fluency the others lack</li>
-            <li>Award-winning ("Best Large Estate Agency Supplier 2021", Property Academy)</li>
-            <li>Algolia search integration and Strapi 5 Live Preview baked in</li>
-            <li>Modern Jamstack: Next.js + Strapi + Vercel + AWS S3 + Cloudflare</li>
-            <li>12-month payment plan available for the build cost (cash-flow friendly)</li>
-            <li>Pingdom monitoring, MySQL replication, image processing via Lambda included</li>
+            <li>30+ years specialism in estate-agency software</li>
+            <li>Award: "Best Large Estate Agency Supplier 2021" (Property Academy)</li>
+            <li>Algolia search integration and Strapi 5 Live Preview included</li>
+            <li>Stack: Next.js, Strapi, Vercel, AWS S3, Cloudflare</li>
+            <li>12-month payment plan available for the build cost</li>
+            <li>Pingdom monitoring, MySQL replication, Lambda-based image processing included</li>
           </ul>
         </div>
         <div class="audit-col" data-type="redflags">
-          <div class="audit-col-head"><span class="col-icon">!</span>Red Flags</div>
+          <div class="audit-col-head"><span class="col-icon">!</span>Considerations</div>
           <ul class="audit-list">
-            <li><strong>24-month minimum contract, AUTO-RENEWING.</strong> The biggest single red flag in any of the four quotes</li>
-            <li>Quote is <strong>contingent on Chestertons GLOBAL being built by them first.</strong> Forced precedence we did not request</li>
-            <li>Mandatory £669/month support fee = AED 3,100 × 24 months = <strong>AED 75K bundled in</strong> before we even launch</li>
-            <li><strong>£500/month penalty</strong> for delays caused by our own feedback or content delivery</li>
-            <li>Photography (£15/image), copy (£0.35/word), Google Maps charges, live-chat third-party costs all <strong>paid by us</strong></li>
-            <li>UK time zone (3-hour offset). Real-time review windows reduced to half a day</li>
-            <li>Total 2-year cash commitment ~AED 153K, plus the auto-renewal beyond</li>
-            <li>Disaster recovery NOT included as standard. Charged separately if requested</li>
-            <li>60-day proposal expiry. Time-pressure tactic before we have done diligence</li>
+            <li>24-month minimum contract with auto-renewal terms</li>
+            <li>Proposal is contingent on the Chestertons Global website being delivered by StarBerry first</li>
+            <li>Mandatory £669/month support fee equals approximately AED 75K over the 24-month minimum</li>
+            <li>£500/month delay penalty applies for delays in client feedback or content delivery</li>
+            <li>Photography (£15 per image), copywriting (£0.35 per word), Google Maps API, and live-chat third-party fees are paid by client</li>
+            <li>UK time zone (UTC+0/+1), 3 to 4-hour offset from UAE</li>
+            <li>Total 2-year cash commitment approximately AED 153K, with auto-renewal beyond</li>
+            <li>Disaster recovery not included in standard scope, charged separately if requested</li>
+            <li>Proposal expires 60 days from issue date</li>
           </ul>
         </div>
       </div>
 
       <div class="audit-bottom">
-        <div class="audit-bottom-label">Bottom line</div>
+        <div class="audit-bottom-label">Summary</div>
         <div class="audit-bottom-text">
-          <strong>Avoid unless we genuinely want a long-term outsourcing relationship locked at the procurement level.</strong> The technical work looks competent. The contract structure is the problem. Auto-renewing 24-month commitments belong in telecom contracts, not website builds.
+          Subscription-based engagement model with mandatory 24-month commitment. Build cost moderate, total contract value comparable to PIXL once the support fee is added. Contractual relationship is longer-term than the other three vendors.
         </div>
       </div>
     </div>
@@ -2940,14 +3304,14 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- TRANSPARENT QUOTE LIBRARY -->
 <section id="quotes" class="container">
-  <div class="section-eyebrow">Quote Library · Full Transparency</div>
-  <h2 class="section-title">The actual proposals. <em>No filter, no spin.</em></h2>
-  <p class="section-lede">Every PDF received from every vendor. Click any card to open the original document. No selective quoting, no edited summaries. The C-suite decides on the same evidence we did.</p>
+  <div class="section-eyebrow">Source Document Library</div>
+  <h2 class="section-title">Original vendor proposals, <em>linked here.</em></h2>
+  <p class="section-lede">All six PDFs received from the four vendors. Click any document to open the original file. Provided so reviewers can verify quoted figures against source documents.</p>
 
   <div class="transparency-banner">
-    <div class="lock-icon">🔓</div>
+    <div class="lock-icon">📎</div>
     <div>
-      <strong>Open access.</strong> All six PDFs are publicly viewable from this dashboard. Source documents, dated April 2026, exactly as received from each vendor.
+      Six source documents available, dated April 2026, exactly as received from each vendor. Total combined size approximately 14 MB.
     </div>
   </div>
 
@@ -2977,7 +3341,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design + Development</div>
-            <div class="quote-doc-meta"><span>5 pages</span><span class="dot"></span><span>161 KB</span><span class="dot"></span><span>10–12 weeks</span></div>
+            <div class="quote-doc-meta"><span>5 pages</span><span class="dot"></span><span>161 KB</span><span class="dot"></span><span>10 to 12 weeks</span></div>
           </div>
           <div class="quote-doc-price">USD 7K<span class="unit">/ AED 26K</span></div>
           <div class="quote-doc-arrow">→</div>
@@ -3000,7 +3364,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design Only</div>
-            <div class="quote-doc-meta"><span>105 pages</span><span class="dot"></span><span>10.4 MB</span><span class="dot"></span><span>5–6 weeks</span></div>
+            <div class="quote-doc-meta"><span>105 pages</span><span class="dot"></span><span>10.4 MB</span><span class="dot"></span><span>5 to 6 weeks</span></div>
           </div>
           <div class="quote-doc-price">AED 20K</div>
           <div class="quote-doc-arrow">→</div>
@@ -3009,7 +3373,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design + Development</div>
-            <div class="quote-doc-meta"><span>105 pages</span><span class="dot"></span><span>10.4 MB</span><span class="dot"></span><span>11–12 weeks</span></div>
+            <div class="quote-doc-meta"><span>105 pages</span><span class="dot"></span><span>10.4 MB</span><span class="dot"></span><span>11 to 12 weeks</span></div>
           </div>
           <div class="quote-doc-price">AED 55K<span class="unit">+ 38K extras</span></div>
           <div class="quote-doc-arrow">→</div>
@@ -3032,7 +3396,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design Only</div>
-            <div class="quote-doc-meta"><span>9 pages</span><span class="dot"></span><span>340 KB</span><span class="dot"></span><span>5–6 weeks</span></div>
+            <div class="quote-doc-meta"><span>9 pages</span><span class="dot"></span><span>340 KB</span><span class="dot"></span><span>5 to 6 weeks</span></div>
           </div>
           <div class="quote-doc-price">AED 42K</div>
           <div class="quote-doc-arrow">→</div>
@@ -3041,7 +3405,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design + Development</div>
-            <div class="quote-doc-meta"><span>14 pages</span><span class="dot"></span><span>361 KB</span><span class="dot"></span><span>16–18 weeks</span></div>
+            <div class="quote-doc-meta"><span>14 pages</span><span class="dot"></span><span>361 KB</span><span class="dot"></span><span>16 to 18 weeks</span></div>
           </div>
           <div class="quote-doc-price">AED 145K<span class="unit">/ 152K incl VAT</span></div>
           <div class="quote-doc-arrow">→</div>
@@ -3072,7 +3436,7 @@ body.authenticated .lock-hint { display: none; }
           <div class="quote-doc-icon">PDF</div>
           <div class="quote-doc-info">
             <div class="quote-doc-type">Design + Development</div>
-            <div class="quote-doc-meta"><span>38 pages</span><span class="dot"></span><span>2.5 MB</span><span class="dot"></span><span>5–6 months</span></div>
+            <div class="quote-doc-meta"><span>38 pages</span><span class="dot"></span><span>2.5 MB</span><span class="dot"></span><span>5 to 6 months</span></div>
           </div>
           <div class="quote-doc-price">£16.6K<span class="unit">+ £669/mo · 24mo</span></div>
           <div class="quote-doc-arrow">→</div>
@@ -3085,24 +3449,24 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- FINANCIALS / TCO -->
 <section id="financials" class="container">
-  <div class="section-eyebrow">Financial Picture</div>
-  <h2 class="section-title">Five-year cost of ownership. <em>Where the real story is.</em></h2>
-  <p class="section-lede">A website is not a one-off purchase. The TCO over five years (build + ongoing changes + hosting + new features) is where the in-house case becomes overwhelming.</p>
+  <div class="section-eyebrow">Five-Year Total Cost of Ownership</div>
+  <h2 class="section-title">Cumulative cost across all five options, <em>year-by-year.</em></h2>
+  <p class="section-lede">Cash cost projection for each option from project start through year five. Year-one figures use the contracted build cost. Years two to five apply published retainer rates where available, or estimated maintenance allowances elsewhere.</p>
 
   <div class="chart-grid">
     <div class="chart-panel">
-      <h3>5-Year TCO Projection</h3>
-      <div class="panel-sub">Year 1 = build cost. Years 2–5 estimated at industry average for ongoing changes, retainers, and hosting.</div>
+      <h3>5-Year TCO Projection · Cumulative</h3>
+      <div class="panel-sub">Year 1 = build cost. Years 2 to 5 use vendor-published retainer rates where applicable, or estimated maintenance allowances otherwise. Internal option assumes AED 8K/year tooling and contingency.</div>
       <div class="chart-wrap">
         <canvas id="tcoChart"></canvas>
       </div>
     </div>
 
     <div class="savings-callout">
-      <div class="savings-label">★ 5-year saving vs PIXL</div>
-      <div class="savings-amount"><span class="currency">AED</span>510K</div>
+      <div class="savings-label">5-year cost spread</div>
+      <div class="savings-amount"><span class="currency">AED</span>62K<span style="color:var(--ink-3);font-size:24px;font-weight:400;"> to 715K</span></div>
       <div class="savings-detail">
-        Roughly the cost of two senior hires for a year, or the marketing budget for one full quarter. Reinvested into the business instead of vendor margin.
+        Cumulative 5-year cost ranges from AED 62K (internal delivery) to AED 715K (PIXL with annual retainer). Year-1 cost is the build itself; years 2 to 5 reflect typical retainer or maintenance assumptions per option.
       </div>
     </div>
   </div>
@@ -3110,9 +3474,9 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- TIMELINE / GANTT -->
 <section id="timeline" class="container">
-  <div class="section-eyebrow">Project Timeline</div>
-  <h2 class="section-title">14 weeks to launch. <em>Tracked in real time.</em></h2>
-  <p class="section-lede">In-house build plan with weekly increments. Each phase is owned by a named team member with measurable deliverables. No black-box waiting periods.</p>
+  <div class="section-eyebrow">Indicative Timeline · Internal Delivery Option</div>
+  <h2 class="section-title">14-week build plan if <em>internal delivery is selected.</em></h2>
+  <p class="section-lede">Indicative timeline for the internal delivery option, broken down weekly. External vendor timelines range from 10 to 24 weeks depending on the vendor selected (see Vendor Proposals section).</p>
 
   <!-- KEY MILESTONES (horizontal, dated) -->
   <div class="milestone-wrap">
@@ -3138,64 +3502,64 @@ body.authenticated .lock-hint { display: none; }
         <div class="milestone-node" data-state="done" data-key="m1">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">23 Mar</div>
-          <div class="milestone-title editable" data-field="title">Project Kickoff</div>
-          <div class="milestone-owner editable" data-field="owner">Sree · Programme</div>
-          <div class="milestone-status">Complete</div>
+          <div class="milestone-date editable-date" data-field="date">23 Mar</div>
+          <div class="milestone-title">Project Kickoff</div>
+          <div class="milestone-owner">Sree · Programme</div>
+          <div class="milestone-status editable-status" data-field="status">Complete</div>
         </div>
 
         <div class="milestone-node" data-state="done" data-key="m2">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">13 Apr</div>
-          <div class="milestone-title editable" data-field="title">IA &amp; Wireframes Approved</div>
-          <div class="milestone-owner editable" data-field="owner">UX Lead</div>
-          <div class="milestone-status">Complete</div>
+          <div class="milestone-date editable-date" data-field="date">13 Apr</div>
+          <div class="milestone-title">IA &amp; Wireframes Approved</div>
+          <div class="milestone-owner">UX Lead</div>
+          <div class="milestone-status editable-status" data-field="status">Complete</div>
         </div>
 
         <div class="milestone-node" data-state="active" data-key="m3">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">11 May</div>
-          <div class="milestone-title editable" data-field="title">Design System Sign-off</div>
-          <div class="milestone-owner editable" data-field="owner">Design + UX</div>
-          <div class="milestone-status">In progress</div>
+          <div class="milestone-date editable-date" data-field="date">11 May</div>
+          <div class="milestone-title">Design System Sign-off</div>
+          <div class="milestone-owner">Design + UX</div>
+          <div class="milestone-status editable-status" data-field="status">In progress</div>
         </div>
 
         <div class="milestone-node" data-state="next" data-key="m4">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">15 Jun</div>
-          <div class="milestone-title editable" data-field="title">Beta Build · Internal</div>
-          <div class="milestone-owner editable" data-field="owner">FE + BE</div>
-          <div class="milestone-status">Planned</div>
+          <div class="milestone-date editable-date" data-field="date">15 Jun</div>
+          <div class="milestone-title">Beta Build · Internal</div>
+          <div class="milestone-owner">FE + BE</div>
+          <div class="milestone-status editable-status" data-field="status">Planned</div>
         </div>
 
         <div class="milestone-node" data-state="next" data-key="m5">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">06 Jul</div>
-          <div class="milestone-title editable" data-field="title">UAT &amp; RERA Audit</div>
-          <div class="milestone-owner editable" data-field="owner">QA + Legal</div>
-          <div class="milestone-status">Planned</div>
+          <div class="milestone-date editable-date" data-field="date">06 Jul</div>
+          <div class="milestone-title">UAT &amp; RERA Audit</div>
+          <div class="milestone-owner">QA + Legal</div>
+          <div class="milestone-status editable-status" data-field="status">Planned</div>
         </div>
 
         <div class="milestone-node" data-state="next" data-key="m6">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">20 Jul</div>
-          <div class="milestone-title editable" data-field="title">Production Launch</div>
-          <div class="milestone-owner editable" data-field="owner">DevOps</div>
-          <div class="milestone-status">Go-live</div>
+          <div class="milestone-date editable-date" data-field="date">20 Jul</div>
+          <div class="milestone-title">Production Launch</div>
+          <div class="milestone-owner">DevOps</div>
+          <div class="milestone-status editable-status" data-field="status">Planned</div>
         </div>
 
         <div class="milestone-node" data-state="next" data-key="m7">
           <span class="milestone-dot"></span>
           <span class="lock-hint" title="Sign in to edit">🔒</span>
-          <div class="milestone-date editable" data-field="date">17 Aug</div>
-          <div class="milestone-title editable" data-field="title">Post-launch Optimisation</div>
-          <div class="milestone-owner editable" data-field="owner">Full team</div>
-          <div class="milestone-status">Planned</div>
+          <div class="milestone-date editable-date" data-field="date">17 Aug</div>
+          <div class="milestone-title">Post-launch Optimisation</div>
+          <div class="milestone-owner">Full team</div>
+          <div class="milestone-status editable-status" data-field="status">Planned</div>
         </div>
       </div>
     </div>
@@ -3290,51 +3654,51 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- INTERNAL TEAM -->
 <section id="team" class="container">
-  <div class="section-eyebrow">Internal Capability</div>
-  <h2 class="section-title">The team that will <em>actually build this.</em></h2>
-  <p class="section-lede">Every skill in the four vendor proposals is already on payroll. We are not pitching a leap of faith, we are pitching a redirection of existing capacity.</p>
+  <div class="section-eyebrow">Internal Capability Inventory</div>
+  <h2 class="section-title">Skills available <em>on the existing team.</em></h2>
+  <p class="section-lede">Skills inventory of the in-house Digital and Technology team, mapped against the technical scope described in the four vendor proposals. Provided as factual context for the engagement model decision.</p>
 
   <div class="team-grid">
     <div class="team-card">
       <div class="team-icon" style="--icon-grad: linear-gradient(135deg,#c084fc,#f472b6);">UX</div>
-      <div class="team-role">Product & UX</div>
+      <div class="team-role">Product &amp; UX</div>
       <div class="team-stack">Figma · Auto-layout · Tokens</div>
-      <div class="team-skills">Owns research, IA, wireframes, design system. Already building Chestertons-grade property cards in production.</div>
+      <div class="team-skills">Research, information architecture, wireframing, high-fidelity UI, design-system production.</div>
     </div>
 
     <div class="team-card">
       <div class="team-icon" style="--icon-grad: linear-gradient(135deg,#38bdf8,#c084fc);">FE</div>
       <div class="team-role">Frontend</div>
-      <div class="team-stack">Next.js · TS · Tailwind · RTL</div>
-      <div class="team-skills">SSR for SEO, mobile-first, native Arabic layouts. Same skills delivered the dashboard you are reading.</div>
+      <div class="team-stack">Next.js · TypeScript · Tailwind · RTL</div>
+      <div class="team-skills">Server-side rendering for SEO, mobile-first responsive layouts, Arabic RTL support, accessibility (WCAG 2.1 AA).</div>
     </div>
 
     <div class="team-card">
       <div class="team-icon" style="--icon-grad: linear-gradient(135deg,#34d399,#38bdf8);">BE</div>
-      <div class="team-role">Backend & CMS</div>
-      <div class="team-stack">Strapi · Node · PostgreSQL</div>
-      <div class="team-skills">Headless CMS, RERA-validated schemas, REST + GraphQL APIs, lead routing into existing CRM.</div>
+      <div class="team-role">Backend &amp; CMS</div>
+      <div class="team-stack">Strapi · Node.js · PostgreSQL</div>
+      <div class="team-skills">Headless CMS configuration, RERA-validated data schemas, REST and GraphQL APIs, CRM integration.</div>
     </div>
 
     <div class="team-card">
       <div class="team-icon" style="--icon-grad: linear-gradient(135deg,#fbbf24,#f472b6);">OPS</div>
-      <div class="team-role">DevOps & SEO</div>
+      <div class="team-role">DevOps &amp; SEO</div>
       <div class="team-stack">Vercel · AWS · GA4 · Lighthouse</div>
-      <div class="team-skills">Edge deploys, Core Web Vitals enforcement, schema.org/RealEstateListing, sitemap automation.</div>
+      <div class="team-skills">Edge deployment, Core Web Vitals monitoring, schema.org structured data, sitemap automation, analytics setup.</div>
     </div>
   </div>
 </section>
 
 <!-- LIVE STATUS TRACKER -->
 <section id="status" class="container">
-  <div class="section-eyebrow">Live Status</div>
-  <h2 class="section-title">Where we are <em>right now.</em></h2>
-  <p class="section-lede">Snapshot of in-flight work. Updates pushed weekly to this dashboard. C-suite gets a single URL that always tells the truth.</p>
+  <div class="section-eyebrow">Discovery &amp; Design Phase Status</div>
+  <h2 class="section-title">Phases completed to date <em>by the internal team.</em></h2>
+  <p class="section-lede">Discovery, information architecture, and wireframing have been delivered internally as part of the option-evaluation work. Status applies to the internal-delivery option only. If an external vendor is selected, the vendor will determine their own discovery cadence.</p>
 
   <div class="status-grid">
     <div class="status-tile">
       <div class="status-tile-head">
-        <div class="status-tile-name">Phase 1–2 · Discovery & Wireframes</div>
+        <div class="status-tile-name">Phase 1 to 2 · Discovery & Wireframes</div>
         <div class="status-pill green"><span class="live-dot"></span>Complete</div>
       </div>
       <div class="status-progress">
@@ -3358,7 +3722,7 @@ body.authenticated .lock-hint { display: none; }
 
     <div class="status-tile">
       <div class="status-tile-head">
-        <div class="status-tile-name">Phase 4–5 · Build · parallel tracks</div>
+        <div class="status-tile-name">Phase 4 to 5 · Build · parallel tracks</div>
         <div class="status-pill amber"><span class="live-dot"></span>Starts Wk 7</div>
       </div>
       <div class="status-progress">
@@ -3372,9 +3736,9 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- RISK MATRIX -->
 <section class="container">
-  <div class="section-eyebrow">Risk Posture</div>
-  <h2 class="section-title">What could go wrong, <em>and what we have done about it.</em></h2>
-  <p class="section-lede">Honest risk register. Every in-house build carries delivery risk. Here is how we have de-risked.</p>
+  <div class="section-eyebrow">Risk Register · Internal Delivery Option</div>
+  <h2 class="section-title">Risks identified for <em>the internal delivery option.</em></h2>
+  <p class="section-lede">Risk register specific to the internal delivery model. Each external vendor proposal carries its own risk profile (documented in the vendor proposal PDFs). Risks below apply if the internal option is selected.</p>
 
   <div class="risk-grid">
     <div class="risk-item">
@@ -3429,9 +3793,9 @@ body.authenticated .lock-hint { display: none; }
 
 <!-- DELIVERABLES SUMMARY -->
 <section class="container">
-  <div class="section-eyebrow">What We Ship</div>
-  <h2 class="section-title">Deliverables, <em>spelled out.</em></h2>
-  <p class="section-lede">No marketing fluff. Every line below is a measurable artefact, owned by us, in our repos, on our cloud.</p>
+  <div class="section-eyebrow">Deliverables · Internal Delivery Option</div>
+  <h2 class="section-title">Artefacts produced under <em>the internal delivery option.</em></h2>
+  <p class="section-lede">Deliverable list specific to the internal delivery model. External vendor deliverables are documented in each vendor's proposal PDF (linked in the Source Document Library).</p>
 
   <div class="del-grid">
     <div class="del-card">
@@ -3470,22 +3834,98 @@ body.authenticated .lock-hint { display: none; }
 <!-- CTA -->
 <section class="cta container">
   <div class="cta-card">
-    <h2>So. <em>Do we sign a vendor, or do we ship?</em></h2>
-    <p>The internal build saves AED 510K over five years, ships six weeks faster than the leading vendor, and leaves us with capability we own. Approval lives with the leadership team. Status lives here.</p>
+    <h2>Decision <em>required.</em></h2>
+    <p>Five delivery paths have been evaluated. Source documents, cost comparison, scope detail, and risk profile are documented above. The selection sits with the leadership team. This dashboard will be updated as the decision progresses.</p>
     <div class="cta-actions">
-      <a class="btn btn-primary" href="#decision">Approve internal build →</a>
-      <a class="btn btn-secondary" href="#vendors">Re-review vendor quotes</a>
+      <a class="btn btn-secondary" href="#decision">Review engagement models</a>
+      <a class="btn btn-secondary" href="#audit">Review option profiles</a>
+      <a class="btn btn-secondary" href="#financials">Review financials</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="container">
-    Chestertons MENA · Website Redesign Programme · Prepared by the internal Digital & Technology team · Last updated <span id="lastUpdate"></span>
+    Chestertons · Website Redesign Programme · Prepared by the internal Digital & Technology team · Last updated <span id="lastUpdate"></span>
   </div>
 </footer>
 
 </main>
+
+<!-- FLOATING PDF QUICK ACCESS -->
+<div class="pdf-fab">
+  <button class="pdf-fab-toggle" id="pdfFabToggle" aria-label="Open quote PDF library">
+    <span class="icon">📄</span>
+    <span class="lbl">PDFs</span>
+  </button>
+</div>
+
+<aside class="pdf-panel" id="pdfPanel" aria-label="Source proposal documents">
+  <div class="pdf-panel-head">
+    <div>
+      <h4>Source Proposals</h4>
+      <div class="sub">All 6 vendor PDFs · click to open</div>
+    </div>
+    <button class="pdf-panel-close" id="pdfPanelClose" aria-label="Close panel">×</button>
+  </div>
+  <div class="pdf-panel-list">
+    <div class="pdf-panel-group">DevSpace · Pakistan</div>
+    <a class="pdf-panel-link" data-vendor="ds" href="quotes/devspace-design.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Design Only</span>
+        <span class="pdf-panel-link-meta">USD 2,200 · 3 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+    <a class="pdf-panel-link" data-vendor="ds" href="quotes/devspace-design-dev.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Design + Development</span>
+        <span class="pdf-panel-link-meta">USD 7,000 · 5 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+
+    <div class="pdf-panel-group">Digital Gravity · Dubai</div>
+    <a class="pdf-panel-link" data-vendor="dg" href="quotes/digital-gravity-design-dev.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Combined Proposal</span>
+        <span class="pdf-panel-link-meta">AED 20K / 55K · 105 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+
+    <div class="pdf-panel-group">PIXL Global · Dubai</div>
+    <a class="pdf-panel-link" data-vendor="px" href="quotes/pixl-design.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Design Only</span>
+        <span class="pdf-panel-link-meta">AED 42,000 · 9 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+    <a class="pdf-panel-link" data-vendor="px" href="quotes/pixl-design-dev.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Design + Development</span>
+        <span class="pdf-panel-link-meta">AED 145,000 · 14 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+
+    <div class="pdf-panel-group">StarBerry · UK</div>
+    <a class="pdf-panel-link" data-vendor="sb" href="quotes/starberry-design-dev.pdf" target="_blank" rel="noopener">
+      <span class="pdf-mini">PDF</span>
+      <span class="pdf-panel-link-info">
+        <span class="pdf-panel-link-name">Combined Proposal</span>
+        <span class="pdf-panel-link-meta">£16,650 + £669/mo · 38 pages</span>
+      </span>
+      <span class="pdf-panel-link-arrow">↗</span>
+    </a>
+  </div>
+</aside>
 
 <!-- AUTH MODAL -->
 <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
@@ -3547,16 +3987,31 @@ function showToast(msg, type = 'success', duration = 2400) {
   t._timer = setTimeout(() => t.className = 'toast ' + type, duration);
 }
 
+// === Status options ===
+const STATUS_OPTIONS = [
+  { state: 'done',    label: 'Complete'    },
+  { state: 'active',  label: 'In progress' },
+  { state: 'next',    label: 'Planned'     },
+  { state: 'blocked', label: 'Blocked'     },
+  { state: 'delayed', label: 'Delayed'     }
+];
+
 // === Restore saved milestone edits ===
 function restoreMilestoneEdits() {
   const edits = storage.get(EDITS_KEY) || {};
   document.querySelectorAll('.milestone-node').forEach(node => {
     const key = node.dataset.key;
     if (!edits[key]) return;
-    Object.entries(edits[key]).forEach(([field, value]) => {
-      const el = node.querySelector(`.editable[data-field="${field}"]`);
-      if (el && value) el.textContent = value;
-    });
+    const e = edits[key];
+    if (e.date) {
+      const dateEl = node.querySelector('[data-field="date"]');
+      if (dateEl) dateEl.textContent = e.date;
+    }
+    if (e.state && e.statusLabel) {
+      node.dataset.state = e.state;
+      const statusEl = node.querySelector('[data-field="status"]');
+      if (statusEl) statusEl.textContent = e.statusLabel;
+    }
   });
 }
 
@@ -3565,21 +4020,92 @@ function persistMilestoneEdits() {
   const edits = {};
   document.querySelectorAll('.milestone-node').forEach(node => {
     const key = node.dataset.key;
-    edits[key] = {};
-    node.querySelectorAll('.editable').forEach(el => {
-      edits[key][el.dataset.field] = el.textContent.trim();
-    });
+    const dateEl = node.querySelector('[data-field="date"]');
+    const statusEl = node.querySelector('[data-field="status"]');
+    edits[key] = {
+      date: dateEl ? dateEl.textContent.trim() : null,
+      state: node.dataset.state,
+      statusLabel: statusEl ? statusEl.textContent.trim() : null
+    };
   });
   const ok = storage.set(EDITS_KEY, edits);
   const status = document.getElementById('saveStatus');
   if (status) status.textContent = ok ? 'All changes saved · ' + new Date().toLocaleTimeString() : 'Save failed (storage blocked)';
 }
 
-function debouncedSave() {
-  const status = document.getElementById('saveStatus');
-  if (status) status.textContent = 'Saving…';
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(persistMilestoneEdits, 600);
+// === Inline date editor ===
+function openDateEditor(el) {
+  if (el.querySelector('input.date-input-inline')) return; // already open
+  const original = el.textContent.trim();
+  el.dataset._original = original;
+  el.innerHTML = '';
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'date-input-inline';
+  input.value = original;
+  input.placeholder = 'e.g. 23 Mar';
+  input.maxLength = 12;
+  el.appendChild(input);
+  input.focus();
+  input.select();
+
+  function commit() {
+    const val = input.value.trim() || el.dataset._original || '';
+    el.textContent = val;
+    persistMilestoneEdits();
+  }
+  function cancel() {
+    el.textContent = el.dataset._original || '';
+  }
+  input.addEventListener('blur', commit);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+    if (e.key === 'Escape') { e.preventDefault(); cancel(); input.blur(); }
+  });
+}
+
+// === Status dropdown ===
+let openDropdown = null;
+function closeStatusDropdown() {
+  if (openDropdown) {
+    openDropdown.remove();
+    openDropdown = null;
+    document.removeEventListener('click', onDocClickClose, true);
+  }
+}
+function onDocClickClose(e) {
+  if (openDropdown && !openDropdown.contains(e.target) && !e.target.classList.contains('editable-status')) {
+    closeStatusDropdown();
+  }
+}
+function openStatusDropdown(el) {
+  closeStatusDropdown();
+  const node = el.closest('.milestone-node');
+  if (!node) return;
+  const currentState = node.dataset.state;
+  const dd = document.createElement('div');
+  dd.className = 'status-dropdown';
+  STATUS_OPTIONS.forEach(opt => {
+    const row = document.createElement('div');
+    row.className = 'status-option' + (opt.state === currentState ? ' current' : '');
+    row.dataset.state = opt.state;
+    row.innerHTML = `<span class="status-swatch"></span><span>${opt.label}</span>`;
+    row.addEventListener('click', () => {
+      node.dataset.state = opt.state;
+      el.textContent = opt.label;
+      closeStatusDropdown();
+      persistMilestoneEdits();
+    });
+    dd.appendChild(row);
+  });
+
+  // Position relative to the clicked element
+  document.body.appendChild(dd);
+  const rect = el.getBoundingClientRect();
+  dd.style.left = Math.min(rect.left, window.innerWidth - 180) + 'px';
+  dd.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+  openDropdown = dd;
+  setTimeout(() => document.addEventListener('click', onDocClickClose, true), 0);
 }
 
 // === Auth state UI ===
@@ -3608,16 +4134,13 @@ function renderAuthState() {
 }
 
 function setEditableState(enabled) {
-  document.querySelectorAll('.editable').forEach(el => {
-    if (enabled) {
-      el.setAttribute('contenteditable', 'true');
-      el.setAttribute('spellcheck', 'true');
-    } else {
-      el.removeAttribute('contenteditable');
-    }
-  });
   if (enabled) document.body.classList.add('edit-mode');
-  else document.body.classList.remove('edit-mode');
+  else {
+    document.body.classList.remove('edit-mode');
+    closeStatusDropdown();
+    // Cancel any open inline date editor
+    document.querySelectorAll('.editable-date input.date-input-inline').forEach(input => input.blur());
+  }
 }
 
 function toggleEditMode() {
@@ -3626,7 +4149,7 @@ function toggleEditMode() {
   setEditableState(editMode);
   renderAuthState();
   if (editMode) {
-    showToast('Edit mode on. Click any milestone field to update.', 'success');
+    showToast('Edit mode on. Click a date to type, click status for a dropdown.', 'success', 3500);
   } else {
     persistMilestoneEdits();
     showToast('Edit mode off. Changes saved.', 'success');
@@ -3674,6 +4197,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAuthState();
   restoreMilestoneEdits();
   initCostTabs();
+  initPdfFab();
 
   // Attach login button (initial)
   const loginBtnInit = document.getElementById('loginBtn');
@@ -3696,28 +4220,65 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Listen for milestone edits
-  document.querySelectorAll('.editable').forEach(el => {
-    el.addEventListener('input', () => {
-      if (editMode && currentUser) debouncedSave();
-    });
-    el.addEventListener('blur', () => {
-      if (editMode && currentUser) persistMilestoneEdits();
-    });
-    el.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+  // Date click → open inline text input (only in edit mode)
+  document.querySelectorAll('.editable-date').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (!currentUser || !editMode) return;
+      if (el.querySelector('input')) return; // already open
+      e.preventDefault();
+      e.stopPropagation();
+      openDateEditor(el);
     });
   });
 
-  // Block edit attempts when locked
-  document.querySelectorAll('.editable').forEach(el => {
-    el.addEventListener('mousedown', (e) => {
-      if (!currentUser || !editMode) {
-        // Allow normal selection but show hint if they try to edit
-      }
+  // Status click → open dropdown (only in edit mode)
+  document.querySelectorAll('.editable-status').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (!currentUser || !editMode) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openStatusDropdown(el);
     });
   });
+
+  // Close dropdown / commit date on Escape globally
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeStatusDropdown();
+  });
 });
+
+// =============================
+// FLOATING PDF PANEL
+// =============================
+function initPdfFab() {
+  const toggle = document.getElementById('pdfFabToggle');
+  const panel = document.getElementById('pdfPanel');
+  const close = document.getElementById('pdfPanelClose');
+  if (!toggle || !panel) return;
+
+  function openPanel() { panel.classList.add('open'); }
+  function closePanel() { panel.classList.remove('open'); }
+  function togglePanel() {
+    if (panel.classList.contains('open')) closePanel();
+    else openPanel();
+  }
+  toggle.addEventListener('click', (e) => { e.stopPropagation(); togglePanel(); });
+  close.addEventListener('click', closePanel);
+
+  // Close when clicking outside the panel
+  document.addEventListener('click', (e) => {
+    if (panel.classList.contains('open') &&
+        !panel.contains(e.target) &&
+        !toggle.contains(e.target)) {
+      closePanel();
+    }
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && panel.classList.contains('open')) closePanel();
+  });
+}
 
 // =============================
 // COST TAB SWITCHER
