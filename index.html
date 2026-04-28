@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Chestertons · Website Redesign · Executive Dashboard</title>
-<link rel="icon" type="image/avif" href="assets/chestertons-logo.avif" />
-<link rel="apple-touch-icon" href="assets/chestertons-logo.avif" />
+<link rel="icon" type="image/svg+xml" href="assets/chestertons-logo-white.svg" />
+<link rel="apple-touch-icon" href="assets/chestertons-logo-white.svg" />
 <meta name="theme-color" content="#0a0d24" />
 <meta property="og:title" content="Chestertons · Website Redesign Dashboard" />
-<meta property="og:description" content="Vendor quote analysis, financial breakdown, and live project status for the Chestertons website redesign programme." />
-<meta property="og:image" content="assets/chestertons-logo.avif" />
+<meta property="og:description" content="Vendor proposal analysis, financial breakdown, and decision brief for the Chestertons website redesign programme." />
+<meta property="og:image" content="assets/chestertons-logo-white.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -121,20 +121,18 @@ main { position: relative; z-index: 2; }
 .nav-brand {
   display: flex;
   align-items: center;
-  padding-right: 18px;
+  padding-right: 16px;
   border-right: 1px solid var(--line);
-  height: 50px;
+  height: 26px;
 }
 .nav-brand img {
-  height: 48px;
+  height: 24px;
   width: auto;
   display: block;
-  /* Keep the purple logo legible on the dark nav */
-  filter: brightness(1.1) saturate(1.05);
-  transition: opacity 0.2s, filter 0.2s;
+  transition: opacity 0.2s;
 }
 .nav-brand:hover img {
-  filter: brightness(1.2) saturate(1.15);
+  opacity: 0.85;
 }
 .nav a {
   color: var(--ink-2);
@@ -2635,7 +2633,7 @@ body.authenticated .lock-hint { display: none; }
 
 <nav class="nav">
   <a class="nav-brand" href="#" title="Chestertons" aria-label="Chestertons home">
-    <img src="assets/chestertons-logo.avif" alt="Chestertons" width="128" height="48" />
+    <img src="assets/chestertons-logo-white.svg" alt="Chestertons" width="120" height="24" />
   </a>
   <a href="#decision">Decision</a>
   <a href="#vendors">Vendors</a>

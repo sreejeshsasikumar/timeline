@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" role="img" aria-label="Chestertons" preserveAspectRatio="xMidYMid meet">
+  <text x="0" y="158"
+        textLength="1000"
+        lengthAdjust="spacingAndGlyphs"
+        font-family="'Helvetica Neue', 'Arial Black', Arial, sans-serif"
+        font-size="170"
+        font-weight="900"
+        fill="#ffffff">CHESTERTONS</text>
+  <line x1="818" y1="20" x2="818" y2="178"
+        stroke="#ffffff"
+        stroke-width="3"
+        stroke-linecap="butt"/>
+</svg>
